@@ -1,6 +1,5 @@
 #include "get_next_line.h"
 
-
 int	ft_strlen(const char *string)
 {
 	int	i;
@@ -9,64 +8,36 @@ int	ft_strlen(const char *string)
 	if (!string)
 		return (0);
 	while (string[i])
-	{
 		i++;
-	}
 	return (i);
 }
-
-char *ft_strnjoin(char *remain, char *buf, int n)
+void	ft_free(char **str)
 {
-	int	len_remain;
-	int	i;
-	int	j;
-	char	*new;
-
-	if (!buf)
-		return (NULL);
-	if (!remain)
-		remain = calloc(1, sizeof(char));
-
-	if (!remain)
-		return (NULL);
-	len_remain = ft_strlen(remain);
-	i = -1;
-	j = 0;
-	new = calloc((len_remain + n + 1), sizeof(char));
-	if (!new)
-		return (free(remain), NULL);
-	while ( ++i < len_remain || (j + len_remain) < n)
-	{
-	
-		//printf(" i = %d\n",i);	
-		if (i < len_remain)
-		{
-			//	printf("new[j] = %c. remain[i] = %c\n", new[j], remain[i]);
-			new[j] = remain[i];
-		}
-		if (i < n)
-		{
-			//printf("new[j] = %c. buf[i] = %c.\n", new[j + len_remain], buf[i]);
-			new[j + len_remain] = buf[i];
-		}
-		j++;
-		}
-	return (free(remain), remain = NULL, new);
+	free(*str);
+	*str = NULL;
 }
-
-char	*ft_end_line_found(char *remain, char **line, int n)
+char *ft_strnjoin(char *s1, char *s2, int n)
 {
-	char	*temp;
-	int	len_remain;
+	char	*line;
+	int		i;
+	int		j;
 
-	len_remain = ft_strlen(remain);
-	temp = calloc(len_remain + 1, sizeof(char));
-	temp = ft_strnjoin(temp, remain, len_remain);
-	*line = ft_strnjoin(*line, remain, n);
-	free (remain);
-	remain = NULL;
-	remain = ft_strnjoin(remain, &temp[n], len_remain - n);
-	return(free(temp),remain);
+	if (!s2 || n == 0)
+		return (NULL);
+	if (!s1)
+		s1 = calloc(1, sizeof(char));
+	if (!s1)
+		return (NULL);
+	line = calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
+	if (!line)
+		return(ft_free(&s1), NULL);
+	i = -1;
+	j = -1;
+	while (s1[++i] && i < n)
+		line[i] = s1[i];
+	while (s2[++j] && (i + j) < n)
+			line[i + j] = s2[j];
+	return (ft_free(&s1),line);
 }
 
 int	ft_find_end_line(char *line)
@@ -87,53 +58,82 @@ int	ft_find_end_line(char *line)
 	return(0);
 }
 
-
-char	*get_next_line(int fd)
+char	*ft_read(int fd, char *remain)
 {
-	static char *remain;
-	char			*buf;
-	char			*line;
-	int			read_chars;
-	int			n;
+	char	*read_line;
+	int		read_chars;
 
+	read_line = calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!read_line)
+		return (NULL);
 	read_chars = 1;
-	buf = calloc(BUFFER_SIZE + 1, sizeof(char));
-	while (buf)
+	while (read_chars > 0 && ft_find_end_line(read_line) == 0)
 	{
-		//printf("Antes de hacer nada, remain = %s.\n", remain);
-		if ((n = ft_find_end_line(&remain[0])) == 0) //No he encontrado salto de línea. O remain estaba vacío.
-		{
-			read_chars = read(fd, buf, BUFFER_SIZE); //Quizás habría que hacer un free o algo así de buf?
-	//printf("buf = %s\n", buf);
-	//printf("He entrado al primer condicional. read_chars = %d. a strnjoin meto: %d\n", n, ft_strlen(buf) + ft_strlen(remain));
-			remain = ft_strnjoin(remain, buf, (ft_strlen(buf) + ft_strlen(remain)));
-		}
-		if (read_chars > 0 && n != 0)
-		{
-			line = calloc(n + 1, sizeof(char));
-			remain =ft_end_line_found(remain, &line, n);
-		//	printf("Antes de salir, remain = %s, line = %s.\n", remain, line);		
-			return (free(buf), line);
-		}
-		else if (read_chars <= 0)
-			break;
+		read_chars = read(fd, read_line, BUFFER_SIZE);
+		if (read_chars > 0)
+			remain = ft_strnjoin(remain, read_line, read_chars + ft_strlen(remain));
 	}
-
-	return (free(buf), free(remain), NULL);
+	if (read_chars == -1)
+		return (ft_free(&read_line), ft_free(&remain), NULL);
+	return (ft_free(&read_line), remain);
 }
 
+char	*clean_remain(char *remain)
+{
+	int		n;
+	char	*line;
 
-int		main (void)
+	n = ft_find_end_line(remain);
+	if (n == 0)
+	{
+		line = NULL;
+		return(ft_free(&remain), NULL);
+	}
+	ft_free(&line);
+	line = ft_strnjoin(line, &remain[n], ft_strlen(remain) - n);
+	ft_free(&remain);
+	return(line);
+}
+char	*get_next_line(int fd){
+	static char	*remain;
+	char		*line;
+	int			n;
+
+	if (!fd || fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (!remain || (remain && ft_find_end_line(remain) == 0))
+		remain = ft_read(fd, remain);
+	if (!remain)
+		return (NULL);
+	n = ft_find_end_line(remain);
+	if (n != 0)
+		line = ft_strnjoin(NULL, remain,n);
+	else
+		line = ft_strnjoin(NULL, remain, ft_strlen(remain));
+	if (!line || line == NULL)
+		return (ft_free(&remain), NULL);
+	remain = clean_remain(remain);
+	return(line);
+}
+
+/*int		main (void)
 {
 	//static char *remain;
 	char *str;
 	int fd = open("prueba.txt", O_RDONLY);
 
+	// for (int i = 0; i < 4; i++)
+	// {
+	// 	str = get_next_line(fd);
+	// 	printf("--------------\nDe vuelta en el main. str = %s\n-----------------\n\n", str);
+	// 	free(str);
+	// 	//str[0] = "\0";
+	// }
 	while ((str = get_next_line(fd)) != NULL)
 	{
 		printf("--------------\nDe vuelta en el main. str = %s\n-----------------\n\n", str);
-	free(str);
+		free(str);
 	}
-
+	//str = NULL;
 	close(fd);
-}
+}*/
