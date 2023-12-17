@@ -70,7 +70,7 @@ char	*clean_remain(char *remain)
 	}
 	line = ft_strdup(&remain[n], ft_strlen(remain) - n);
 	if (!line)
-		return (ft_free(&line), ft_free(&remain), NULL);
+		return (ft_free(&remain), NULL);
 	ft_free(&remain);
 	return (line);
 }
@@ -88,8 +88,12 @@ char	*ft_read(int fd, char *remain)
 	{
 		read_chars = read(fd, read_line, BUFFER_SIZE);
 		if (read_chars > 0)
+		{
 			remain = ft_strnjoin(remain, read_line,
 					read_chars + ft_strlen(remain));
+			if (!remain)
+				return (ft_free(&remain), ft_free(&read_line), NULL);
+		}
 	}
 	if (read_chars == -1)
 		return (ft_free(&read_line), ft_free(&remain), NULL);
@@ -119,16 +123,15 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-/*int		main (void)
-{
-	char *str;
-	int fd = open("prueba.txt", O_RDONLY);
+// int		main (void)
+// {
+// 	char *str;
+// 	int fd = open("prueba1.txt", O_RDONLY);
 
-	while ((str = get_next_line(fd)) != NULL)
-	{
-		printf("--------------\nstr = %s\n-----------\n\n", str);
-		free(str);
-	}
-	//str = NULL;
-	close(fd);
-}*/
+// 	while ((str = get_next_line(fd)) != NULL)
+// 	{
+// 		printf("--------------\nstr = %s\n-----------\n\n", str);
+// 		free(str);
+// 	}
+// 	close(fd);
+// }

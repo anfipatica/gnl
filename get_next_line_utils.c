@@ -6,7 +6,7 @@
 /*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 17:15:33 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2023/12/17 15:16:06 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2023/12/17 20:23:14 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	*ft_calloc(int nitems, int size)
 {
 	void	*str;
 
-	str = (malloc(nitems * size));
+	str = (char *)(malloc(nitems * size));
 	if (!str)
 		return (NULL);
 	ft_bzero(str, (nitems * size));

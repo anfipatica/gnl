@@ -6,7 +6,7 @@
 /*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 14:42:43 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2023/12/17 16:20:08 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2023/12/17 18:36:15 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!remain[fd] || (remain[fd] && ft_find_end_line(remain[fd]) == 0))
-			remain[fd] = ft_read(fd, remain[fd]);
+		remain[fd] = ft_read(fd, remain[fd]);
 	if (!remain[fd])
 		return (NULL);
 	n = ft_find_end_line(remain[fd]);
@@ -121,21 +121,46 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int		main (void)
+/*int		main (void)
 {
-	char *str;
+	char	*str[3];
 	int fd[3];
 	fd[0] = open("prueba1.txt", O_RDONLY);
 	fd[1] = open("prueba2.txt", O_RDONLY);
 	fd[2] = open("prueba3.txt", O_RDONLY);
-	int i = -1;
-	
+	int i = 1;
+	int check;
 
-	
-		printf("--------------\nstr = %s\n-----------\n\n", str);
-		free(str);
+	while (i < 10)
+	{
+		i = 0;
+		check = 0;
 
-	while (fd[++i])
+		str[i] = get_next_line(fd[i]);
+		printf("fd_%d = %s\n", i, str[i]);
+		i++;
+		
+		str[i] = get_next_line(fd[i]);
+		printf("fd_%d = %s\n", i, str[i]);
+		i++;
+
+		str[i] = get_next_line(fd[i]);
+		printf("fd_%d = %s\n", i, str[i]);
+		i++;
+
+		printf("\n · · · · · · · · · · · · · · · · · · · ·\n");
+		for (int j = 0; j < i; j++)
+		{
+			if (!str[j])
+				check++;
+		}
+
+		for (int j = 0; j < i; j++)
+			free(str[j]);
+
+		if (check == i)
+			break;
+	}
+	while (++i < 3)
 		close(fd[i]);
-
-}
+}*/
