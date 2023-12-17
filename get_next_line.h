@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/17 14:46:12 by ymunoz-m          #+#    #+#             */
+/*   Updated: 2023/12/17 14:46:12 by ymunoz-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # ifndef BUFFER_SIZE
@@ -11,13 +23,14 @@
 # include <string.h> //strlen
 
 char	*get_next_line(int fd);
-char	*readbuf(int fd, char *storage);
-char	*new_line(char *storage);
-char	*clean_storage(char *storage);
+char	*ft_read(int fd, char *remain);
+char	*clean_remain(char *remain);
+int		ft_find_end_line(char *line);
+char	*ft_strnjoin(char *s1, char *s2, int n);
 void	ft_free(char **str);
-char	*ft_substr(char *s, unsigned int start, size_t len);
-char	*ft_strchr(char *s, int c);
 int		ft_strlen(const char *s);
-char	*ft_strjoin(char *s1, char *s2);
+void	*ft_calloc(int nitems, int size);
+void	ft_bzero(void *string, int n);
+char	*ft_strdup(char *s1, int n);
 
 #endif
