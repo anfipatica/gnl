@@ -123,15 +123,15 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-// int		main (void)
-// {
-// 	char *str;
-// 	int fd = open("prueba1.txt", O_RDONLY);
+/*int		main (void)
+{
+	char *str;
+	int fd = open("prueba1.txt", O_RDONLY);
 
-// 	while ((str = get_next_line(fd)) != NULL)
-// 	{
-// 		printf("--------------\nstr = %s\n-----------\n\n", str);
-// 		free(str);
-// 	}
-// 	close(fd);
-// }
+	while ((str = get_next_line(fd)) != NULL)
+	{
+		printf("--------------\nstr = %s\n-----------\n\n", str);
+		free(str);
+	}
+	close(fd);
+}*/
