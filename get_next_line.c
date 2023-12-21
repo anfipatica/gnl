@@ -116,14 +116,14 @@ char	*get_next_line(int fd)
 	if (n != 0)
 		line = ft_strdup(remain, n);
 	else
-		line = ft_strdup(&remain[n], ft_strlen(remain) - n);
+		line = ft_strdup(remain, ft_strlen(remain));
 	if (!line || line == NULL)
 		return (ft_free(&remain), NULL);
 	remain = clean_remain(remain);
 	return (line);
 }
 
-/*int		main (void)
+int		main (void)
 {
 	char *str;
 	int fd = open("prueba1.txt", O_RDONLY);
@@ -131,7 +131,7 @@ char	*get_next_line(int fd)
 	while ((str = get_next_line(fd)) != NULL)
 	{
 		printf("--------------\nstr = %s\n-----------\n\n", str);
-		free(str);
+
 	}
 	close(fd);
-}*/
+}

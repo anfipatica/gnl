@@ -6,7 +6,7 @@
 /*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 14:42:43 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2023/12/17 18:36:15 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2023/12/21 15:19:01 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,13 +121,13 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-/*int		main (void)
+int		main (void)
 {
 	char	*str[3];
 	int fd[3];
-	fd[0] = open("prueba1.txt", O_RDONLY);
-	fd[1] = open("prueba2.txt", O_RDONLY);
-	fd[2] = open("prueba3.txt", O_RDONLY);
+	fd[0] = open("long_line.txt", O_RDONLY);
+	fd[1] = open("no_line.txt", O_RDONLY);
+	fd[2] = open("many_nl.txt", O_RDONLY);
 	int i = 1;
 	int check;
 
@@ -163,4 +163,4 @@ char	*get_next_line(int fd)
 	}
 	while (++i < 3)
 		close(fd[i]);
-}*/
+}
